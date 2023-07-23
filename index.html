@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Live (Mosam All India) 🌦️</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .inputs {
+            display: flex;
+            align-items: center;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .weather-info {
+            margin-top: 20px;
+        }
+
+        .weather-info p {
+            margin: 5px 0;
+        }
+
+        .icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="inputs">
+            <input type="text" id="locas" placeholder="Enter location">
+            <button onclick="locations()" type="submit">Search Location</button>
+        </div>
+        <div id="mains" class="weather-info">
+            <!-- Weather information will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        const maindiv = document.getElementById("mains");
+
+        function locations() {
+            const locasen = document.getElementById("locas"); // Get the input field value inside the function
+            let locas = locasen.value;
+            console.log(locas); // Check if the location value is correct
+            locasen.value = "";
+
+            let url = 'http://api.weatherapi.com/v1/current.json?key=113db87ca2ee4b7db0f102601232207&q='.concat(locas, '&aqi=yes');
+            console.log(url);
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const conditionText = data.current.condition ? data.current.condition.text : "N/A";
+                    maindiv.innerHTML = `<h1>Weather Information</h1>
+                    <p><strong>Location:</strong>${data.location.name}, ${data.location.country}</p>
+                    <p><strong>Local Time:</strong> ${data.location.localtime}</p>
+                    <p><strong>Temperature:</strong> ${data.current.temp_c}C (${data.current.temp_f} F)</p>
+                    <p><strong>Condition:</strong> ${conditionText}</p>
+                    <p><strong>Wind:</strong> ${data.current.wind_kph} kph (${data.current.wind_dir})</p>
+                    <p><strong>Pressure:</strong> ${data.current.pressure_mb} mb (${data.current.pressure_in} in)</p>
+                    <p><strong>Humidity:</strong> ${data.current.humidity}</p>
+                    <p><strong>Cloud:</strong> ${data.current.cloud}</p>
+                    <p><strong>Feels Like:</strong> ${data.current.feelslike_c} (${data.current.feelslike_f})</p>
+                    <p><strong>Visibility:</strong> ${data.current.vis_km} km (${data.current.vis_miles} miles)</p>`;
+                })
+                .catch(error => {
+                    console.log("custom error ", error);
+                });
+
+        }
+
+    // 113db87ca2ee4b7db0f102601232207
+    </script>
+</body>
+
+</html>
